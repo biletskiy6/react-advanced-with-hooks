@@ -12,8 +12,9 @@ import store from './redux/store';
 import PostsList from './components/PostsList';
 import TodosList from './components/TodosList';
 import PostDetails from './components/PostDetails';
-const typicodeService = new TypicodeService();
+import Button from './components/Button';
 
+const typicodeService = new TypicodeService();
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           dispatchData={setPostsAction}
           dispatchError={fetchPostsError}
         />
+        <Button color="red">Hello</Button>
         <hr />
         <Resource
           getData={typicodeService.getTodos}

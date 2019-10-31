@@ -12,13 +12,15 @@ export default class TypicodeSerivce {
     }
 
     getPost = (postId) => {
-        return this.getResource(`/posts/${postId}`);
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(this.getResource(`/posts/${postId}`))
+            }, 1000);
+        })
     }
 
     getTodos = () => {
         return this.getResource("/todos");
     }
-
-
 
 }

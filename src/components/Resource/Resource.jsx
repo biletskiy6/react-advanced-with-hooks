@@ -1,21 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { setPostsAction, fetchPostsError } from '../../redux/actions/postsActions';
 export default function Resource(props) {
     const dispatch = useDispatch();
     const state = useSelector((state) => state[props.state]);
+    const { getData, render, dispatchData, dispatchError, resetLoadingBeforeRender, deps = [] } = props;
 
-    const { getData, render, dispatchData, dispatchError } = props;
     useEffect(() => {
-        console.log(1);
+        if (resetLoadingBeforeRender) dispatch(resetLoadingBeforeRender())
         getData()
             .then(({ data }) => dispatch(dispatchData(data)))
             .catch((err) => dispatch(dispatchError(err)));
-    }, []);
-    const { loading, errors, data } = state;
+    }, deps);
+    const { loading, error, data } = state;
 
     if (loading) return <CircularProgress size={20} />
-    if (errors) return 'ERROR!!!!!!!!!';
+    if (error) return 'ERROR!!!!!!!!!';
     return render(data);
 }  
