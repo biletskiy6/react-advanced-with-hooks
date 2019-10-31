@@ -1,25 +1,47 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { TypicodeContext } from './TypicodeContext/TypicodeContext';
+import TypicodeService from './services/TypicodeService';
+import Resource from './components/Resource';
+import ItemList from './components/ItemList';
+import { Provider } from 'react-redux';
+import { setPostsAction, fetchPostsError } from './redux/actions/postsActions';
+import { setTodosAction, fetchTodosError } from './redux/actions/todosActions';
+import store from './redux/store';
+import PostsList from './components/PostsList';
+import TodosList from './components/TodosList';
+import PostDetails from './components/PostDetails';
+const typicodeService = new TypicodeService();
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <TypicodeContext.Provider value={typicodeService}>
+        <Resource
+          getData={typicodeService.getPosts}
+          render={(items) => (
+            <>
+              <PostsList items={items} />
+              <PostDetails />
+            </>
+          )
+          }
+          state="posts"
+          dispatchData={setPostsAction}
+          dispatchError={fetchPostsError}
+        />
+        <hr />
+        <Resource
+          getData={typicodeService.getTodos}
+          render={(items) => <TodosList items={items} />}
+          state="todos"
+          dispatchData={setTodosAction}
+          dispatchError={fetchTodosError}
+        />
+      </TypicodeContext.Provider>
+    </Provider>
   );
 }
 
